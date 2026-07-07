@@ -3,67 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GT Logistique - Calcul Auto</title>
+    <title>GT Logistique - Expert</title>
     <style>
         :root {
             --gt-navy: #00385D;
             --gt-orange: #D84C38;
             --gt-bg: #F4F7F9;
             --white: #FFFFFF;
+            --coffee: #FFDD00;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--gt-bg); color: var(--gt-navy); margin: 0; padding: 0; }
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 240px; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--gt-bg); color: var(--gt-navy); margin: 0; padding: 0; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 260px; }
 
-        header { background: var(--white); padding: 15px 20px; border-bottom: 3px solid var(--gt-navy); display: flex; justify-content: space-between; align-items: center; }
+        /* Header */
+        header { 
+            background: var(--white); padding: 15px 20px; 
+            border-bottom: 3px solid var(--gt-navy); 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
         .logo { font-weight: 900; font-size: 1.2rem; text-transform: uppercase; }
         .logo span { color: var(--gt-orange); }
 
-        .tabs { display: flex; background: var(--gt-navy); }
-        .tab-btn { 
-            flex: 1; padding: 15px; border: none; color: rgba(255,255,255,0.6); 
-            background: transparent; font-weight: 800; cursor: pointer; 
-            font-size: 0.75rem; text-transform: uppercase;
+        .btn-coffee {
+            background: var(--coffee); color: #000; border: none; padding: 10px 15px;
+            border-radius: 25px; font-size: 0.75rem; font-weight: 800; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+
+        /* Onglets */
+        .tabs { display: flex; background: var(--gt-navy); }
+        .tab-btn { flex: 1; padding: 15px; border: none; color: rgba(255,255,255,0.6); background: transparent; font-weight: 800; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; }
         .tab-btn.active { color: white; background: rgba(255,255,255,0.1); border-bottom: 4px solid var(--gt-orange); }
 
         .content { padding: 15px; }
         .card { background: var(--white); padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .section-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; color: #888; }
 
+        /* Camion */
         .selector { display: flex; gap: 8px; }
         .btn-sel { flex: 1; padding: 12px; border: 1px solid #DDD; background: #F9F9F9; font-weight: 700; cursor: pointer; }
         .btn-sel.active { background: var(--gt-navy); color: white; border-color: var(--gt-navy); }
 
+        /* Lots */
         .lot-card { background: var(--white); border-left: 5px solid var(--gt-orange); padding: 15px; margin-bottom: 10px; position: relative; }
-        input { width: 100%; padding: 15px; border: 1px solid #CCC; font-size: 1.4rem; font-weight: bold; outline: none; box-sizing: border-box; background: #F9F9F9; }
-        .lot-res { margin-top: 10px; font-size: 0.9rem; font-weight: 700; background: #F0F4F7; padding: 10px; }
+        input { width: 100%; padding: 15px; border: 1px solid #CCC; font-size: 1.5rem; font-weight: bold; outline: none; box-sizing: border-box; background: #F9F9F9; color: var(--gt-navy); }
+        .lot-res { margin-top: 10px; font-size: 0.95rem; font-weight: 700; background: #F0F4F7; padding: 10px; border-radius: 4px; }
 
-        .btn-add { width: 100%; background: var(--gt-navy); color: white; border: none; padding: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
+        .btn-add { width: 100%; background: var(--gt-navy); color: white; border: none; padding: 20px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; border-radius: 4px; }
         .btn-del { color: #AAA; background: none; border: none; font-size: 1.2rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
 
-        /* Footer */
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); }
-        .density-status { background: var(--gt-orange); color: white; padding: 4px 10px; font-size: 0.65rem; font-weight: 900; margin-bottom: 10px; display: inline-block; }
-        .total-display { font-size: 2.2rem; font-weight: 900; line-height: 1; }
-        .total-display span { font-size: 0.9rem; color: var(--gt-orange); margin-left: 5px; }
+        /* Fenêtre Soutien (Modal) */
+        #donateModal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
+        }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 400px; width: 100%; }
+        .modal-content h3 { color: var(--gt-navy); font-size: 1.4rem; margin-top: 0; }
+        .wero-box { 
+            background: #f8f9fa; border: 2px dashed var(--gt-orange); padding: 20px; 
+            border-radius: 15px; margin: 20px 0;
+        }
+        .wero-label { font-size: 0.8rem; text-transform: uppercase; color: #666; margin-bottom: 5px; display: block; }
+        .wero-number { font-size: 1.6rem; font-weight: 900; color: var(--gt-navy); letter-spacing: 1px; }
+
+        /* Footer Dashboard */
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 25px; max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); border-radius: 25px 25px 0 0; }
+        .density-status { background: #16a34a; color: white; padding: 4px 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 12px; display: inline-block; border-radius: 3px; }
+        .total-display { font-size: 2.4rem; font-weight: 900; line-height: 1; }
+        .total-display span { font-size: 1rem; color: var(--gt-orange); margin-left: 5px; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .grid label { display: block; font-size: 0.6rem; text-transform: uppercase; opacity: 0.6; }
-        .grid b { font-size: 1rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        .grid label { display: block; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
+        .grid b { font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
+<!-- Fenêtre de paiement Wero -->
+<div id="donateModal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h3>Offrir un café ☕</h3>
+        <p>Si l'application vous est utile, vous pouvez me soutenir via <b>Wero</b> :</p>
+        <div class="wero-box">
+            <span class="wero-label">Numéro de téléphone</span>
+            <div class="wero-number">06 30 32 32 05</div>
+        </div>
+        <p style="font-size: 0.8rem; color: #888;">Merci pour votre soutien !</p>
+        <button onclick="closeModal()" style="width:100%; background:var(--gt-navy); color:white; border:none; padding:15px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">Retour</button>
+    </div>
+</div>
+
 <div class="container">
     <header>
         <div class="logo">GT<span>solutions</span></div>
-        <div style="font-size: 0.6rem; font-weight: 900;">LOGISTIQUE</div>
+        <button class="btn-coffee" onclick="openModal()">☕ Soutenir</button>
     </header>
 
     <div class="tabs">
-        <button id="tabEleveur" class="tab-btn active" onclick="switchTab('eleveur')">1. Prêt à gaver</button>
-        <button id="tabGras" class="tab-btn" onclick="switchTab('gras')">2. Départ Gras</button>
+        <button id="tabEleveur" class="tab-btn active" onclick="switchTab('eleveur')">1. Éleveur (Auto)</button>
+        <button id="tabGras" class="tab-btn" onclick="switchTab('gras')">2. Départ Gras (4)</button>
     </div>
 
     <div class="content">
@@ -76,18 +115,23 @@
         </div>
 
         <div id="list"></div>
-        <button class="btn-add" onclick="add()">+ Ajouter un éleveur</button>
+
+        <button class="btn-add" onclick="add()">+ Ajouter un éleveur / lot</button>
+        
+        <div style="text-align: center; margin-top: 30px; opacity: 0.5; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+            Optimisation Logistique Canards
+        </div>
     </div>
 </div>
 
 <div class="footer" id="footer" style="display:none;">
-    <div id="densityTag" class="density-status">CALCUL EN COURS...</div>
+    <div id="densityTag" class="density-status">MODE CONFORT : 6</div>
     
     <div id="totalDisplay" class="total-display">0 <span>Rolls</span></div>
     
     <div class="grid">
-        <div><label>Total Canards</label><b id="totalD">0</b></div>
-        <div style="text-align:right;"><label>Place Libre</label><b id="libre">0 canards</b></div>
+        <div><label>Nombre Canards</label><b id="totalD">0</b></div>
+        <div style="text-align:right;"><label>Place Libre Camion</label><b id="libre">0 canards</b></div>
     </div>
 </div>
 
@@ -95,6 +139,9 @@
     let currentMode = 'eleveur'; 
     let maxRolls = 48;
     let count = 0;
+
+    function openModal() { document.getElementById('donateModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('donateModal').style.display = 'none'; }
 
     function switchTab(mode) {
         currentMode = mode;
@@ -118,9 +165,9 @@
         div.id = id;
         div.innerHTML = `
             <button class="btn-del" onclick="document.getElementById(${id}).remove(); calc();">✕</button>
-            <span class="section-title">Lot Éleveur n°${count}</span>
-            <input type="number" placeholder="NB CANARDS" class="duck-in" inputmode="numeric" oninput="calc()">
-            <div class="lot-res">Saisissez un nombre...</div>
+            <span class="section-title">Lot n°${count}</span>
+            <input type="number" placeholder="0" class="duck-in" inputmode="numeric" oninput="calc()">
+            <div class="lot-res">En attente...</div>
         `;
         document.getElementById('list').appendChild(div);
     }
@@ -130,28 +177,31 @@
         let totalD = 0;
         inputs.forEach(i => totalD += parseInt(i.value) || 0);
 
-        // --- LOGIQUE DE DENSITÉ AUTOMATIQUE ---
         let density = 7; 
         let tagText = "";
+        let tagColor = "#16a34a";
 
         if (currentMode === 'gras') {
             density = 4;
             tagText = "MODE GRAS : 4 / CAISSE FIXE";
+            tagColor = "#000";
         } else {
-            // Mode Éleveur : On teste si 6 passe, sinon on met 7
+            // Mode Éleveur : Auto-switch 6 ou 7
             if (totalD <= (maxRolls * 36)) {
                 density = 6;
                 tagText = "MODE CONFORT : 6 / CAISSE";
+                tagColor = "#16a34a";
             } else {
                 density = 7;
                 tagText = "MODE MAX : 7 / CAISSE (Serré)";
+                tagColor = "#D84C38";
             }
         }
 
         let perRoll = density * 6;
         document.getElementById('densityTag').innerText = tagText;
+        document.getElementById('densityTag').style.background = tagColor;
 
-        // Détail par lot
         inputs.forEach(i => {
             const val = parseInt(i.value) || 0;
             const resBox = i.nextElementSibling;
@@ -159,10 +209,9 @@
                 const rFull = Math.floor(val / perRoll);
                 const rRest = val % perRoll;
                 resBox.innerHTML = `📦 ${rFull} Rolls` + (rRest > 0 ? ` + ${rRest} canards` : "");
-            } else { resBox.innerHTML = "Saisissez un nombre..."; }
+            } else { resBox.innerHTML = "En attente..."; }
         });
 
-        // Bilan total
         const footer = document.getElementById('footer');
         if(totalD > 0) {
             footer.style.display = 'block';
@@ -173,11 +222,8 @@
 
             document.getElementById('totalDisplay').innerHTML = totalRFull + (totalRRest > 0 ? ` <span>Rolls + ${totalRRest} canards</span>` : ` <span>Rolls</span>`);
             document.getElementById('totalD').innerText = totalD;
-            document.getElementById('libre').innerText = remains >= 0 ? remains + " canards" : "SURCHARGE";
-            
-            // Couleur de sécurité
-            document.getElementById('footer').style.background = (totalRollsNeeded <= maxRolls) ? "var(--gt-navy)" : "#D84C38";
-            document.getElementById('densityTag').style.background = (density === 6) ? "#16a34a" : "var(--gt-orange)";
+            document.getElementById('libre').innerText = (remains >= 0) ? remains + " canards" : "SURCHARGE";
+            document.getElementById('footer').style.background = (totalRollsNeeded <= maxRolls) ? "var(--gt-navy)" : "var(--gt-orange)";
         } else { footer.style.display = 'none'; }
     }
 
