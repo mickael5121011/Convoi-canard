@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GT Logistique - Expert</title>
+    <title>GT Logistique - Plan de Charge</title>
     <style>
         :root {
             --gt-navy: #00385D;
             --gt-orange: #D84C38;
             --gt-bg: #F4F7F9;
             --white: #FFFFFF;
-            --coffee: #FFDD00;
         }
 
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--gt-bg); color: var(--gt-navy); margin: 0; padding: 0; }
@@ -25,10 +24,10 @@
         .logo { font-weight: 900; font-size: 1.2rem; text-transform: uppercase; }
         .logo span { color: var(--gt-orange); }
 
-        .btn-coffee {
-            background: var(--coffee); color: #000; border: none; padding: 10px 15px;
-            border-radius: 25px; font-size: 0.75rem; font-weight: 800; cursor: pointer;
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .tag-logistique {
+            background: var(--gt-navy); color: white; padding: 6px 12px;
+            border-radius: 4px; font-size: 0.65rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
         /* Onglets */
@@ -53,20 +52,6 @@
         .btn-add { width: 100%; background: var(--gt-navy); color: white; border: none; padding: 20px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; border-radius: 4px; }
         .btn-del { color: #AAA; background: none; border: none; font-size: 1.2rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
 
-        /* Fenêtre Soutien (Modal) */
-        #donateModal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
-        }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 400px; width: 100%; }
-        .modal-content h3 { color: var(--gt-navy); font-size: 1.4rem; margin-top: 0; }
-        .wero-box { 
-            background: #f8f9fa; border: 2px dashed var(--gt-orange); padding: 20px; 
-            border-radius: 15px; margin: 20px 0;
-        }
-        .wero-label { font-size: 0.8rem; text-transform: uppercase; color: #666; margin-bottom: 5px; display: block; }
-        .wero-number { font-size: 1.6rem; font-weight: 900; color: var(--gt-navy); letter-spacing: 1px; }
-
         /* Footer Dashboard */
         .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 25px; max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); border-radius: 25px 25px 0 0; }
         .density-status { background: #16a34a; color: white; padding: 4px 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 12px; display: inline-block; border-radius: 3px; }
@@ -80,24 +65,10 @@
 </head>
 <body>
 
-<!-- Fenêtre de paiement Wero -->
-<div id="donateModal" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <h3>Offrir un café ☕</h3>
-        <p>Si l'application vous est utile, vous pouvez me soutenir via <b>Wero</b> :</p>
-        <div class="wero-box">
-            <span class="wero-label">Numéro de téléphone</span>
-            <div class="wero-number">06 30 32 32 05</div>
-        </div>
-        <p style="font-size: 0.8rem; color: #888;">Merci pour votre soutien !</p>
-        <button onclick="closeModal()" style="width:100%; background:var(--gt-navy); color:white; border:none; padding:15px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">Retour</button>
-    </div>
-</div>
-
 <div class="container">
     <header>
         <div class="logo">GT<span>solutions</span></div>
-        <button class="btn-coffee" onclick="openModal()">☕ Soutenir</button>
+        <div class="tag-logistique">LOGISTIQUE</div>
     </header>
 
     <div class="tabs">
@@ -118,8 +89,8 @@
 
         <button class="btn-add" onclick="add()">+ Ajouter un éleveur / lot</button>
         
-        <div style="text-align: center; margin-top: 30px; opacity: 0.5; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-            Optimisation Logistique Canards
+        <div style="text-align: center; margin-top: 40px; opacity: 0.4; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+            Système d'optimisation de chargement
         </div>
     </div>
 </div>
@@ -139,9 +110,6 @@
     let currentMode = 'eleveur'; 
     let maxRolls = 48;
     let count = 0;
-
-    function openModal() { document.getElementById('donateModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('donateModal').style.display = 'none'; }
 
     function switchTab(mode) {
         currentMode = mode;
@@ -183,10 +151,10 @@
 
         if (currentMode === 'gras') {
             density = 4;
-            tagText = "MODE GRAS : 4 / CAISSE FIXE";
+            tagText = "DENSITÉ FIXE : 4 / CAISSE";
             tagColor = "#000";
         } else {
-            // Mode Éleveur : Auto-switch 6 ou 7
+            // Mode Éleveur : Auto-switch 6 ou 7 selon remplissage
             if (totalD <= (maxRolls * 36)) {
                 density = 6;
                 tagText = "MODE CONFORT : 6 / CAISSE";
