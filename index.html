@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GT Logistique - Multi-Flux</title>
+    <title>GT Logistique - Calcul Auto</title>
     <style>
         :root {
             --gt-navy: #00385D;
@@ -15,48 +15,42 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--gt-bg); color: var(--gt-navy); margin: 0; padding: 0; }
         .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 240px; }
 
-        /* Header GT */
         header { background: var(--white); padding: 15px 20px; border-bottom: 3px solid var(--gt-navy); display: flex; justify-content: space-between; align-items: center; }
         .logo { font-weight: 900; font-size: 1.2rem; text-transform: uppercase; }
         .logo span { color: var(--gt-orange); }
 
-        /* Onglets */
         .tabs { display: flex; background: var(--gt-navy); }
         .tab-btn { 
             flex: 1; padding: 15px; border: none; color: rgba(255,255,255,0.6); 
             background: transparent; font-weight: 800; cursor: pointer; 
-            font-size: 0.75rem; text-transform: uppercase; transition: 0.3s;
+            font-size: 0.75rem; text-transform: uppercase;
         }
         .tab-btn.active { color: white; background: rgba(255,255,255,0.1); border-bottom: 4px solid var(--gt-orange); }
 
         .content { padding: 15px; }
-        .card { background: var(--white); padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-radius: 4px; }
+        .card { background: var(--white); padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .section-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; color: #888; }
 
-        /* Sélecteurs */
-        .selector { display: flex; gap: 8px; margin-bottom: 10px; }
-        .btn-sel { flex: 1; padding: 12px; border: 1px solid #DDD; background: #F9F9F9; font-weight: 700; cursor: pointer; font-size: 0.8rem; }
+        .selector { display: flex; gap: 8px; }
+        .btn-sel { flex: 1; padding: 12px; border: 1px solid #DDD; background: #F9F9F9; font-weight: 700; cursor: pointer; }
         .btn-sel.active { background: var(--gt-navy); color: white; border-color: var(--gt-navy); }
-        .btn-sel.orange.active { background: var(--gt-orange); border-color: var(--gt-orange); color: white; }
 
-        /* Éleveurs */
         .lot-card { background: var(--white); border-left: 5px solid var(--gt-orange); padding: 15px; margin-bottom: 10px; position: relative; }
         input { width: 100%; padding: 15px; border: 1px solid #CCC; font-size: 1.4rem; font-weight: bold; outline: none; box-sizing: border-box; background: #F9F9F9; }
-        .lot-res { margin-top: 10px; font-size: 0.9rem; font-weight: 700; background: #F0F4F7; padding: 10px; color: var(--gt-navy); }
+        .lot-res { margin-top: 10px; font-size: 0.9rem; font-weight: 700; background: #F0F4F7; padding: 10px; }
 
         .btn-add { width: 100%; background: var(--gt-navy); color: white; border: none; padding: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
         .btn-del { color: #AAA; background: none; border: none; font-size: 1.2rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
 
-        /* Footer Dashboard */
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 25px; max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); }
+        /* Footer */
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); }
+        .density-status { background: var(--gt-orange); color: white; padding: 4px 10px; font-size: 0.65rem; font-weight: 900; margin-bottom: 10px; display: inline-block; }
         .total-display { font-size: 2.2rem; font-weight: 900; line-height: 1; }
-        .total-display span { font-size: 1rem; color: var(--gt-orange); margin-left: 5px; font-weight: 700; }
+        .total-display span { font-size: 0.9rem; color: var(--gt-orange); margin-left: 5px; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .grid label { display: block; font-size: 0.6rem; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
-        .grid b { font-size: 1.1rem; }
-
-        .info-pill { background: var(--gt-orange); color: white; padding: 4px 10px; font-size: 0.65rem; font-weight: 900; border-radius: 2px; margin-bottom: 10px; display: inline-block; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        .grid label { display: block; font-size: 0.6rem; text-transform: uppercase; opacity: 0.6; }
+        .grid b { font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -64,7 +58,7 @@
 <div class="container">
     <header>
         <div class="logo">GT<span>solutions</span></div>
-        <div style="font-size: 0.6rem; font-weight: 900; text-align: right;">LOGISTIQUE<br>CANARDS</div>
+        <div style="font-size: 0.6rem; font-weight: 900;">LOGISTIQUE</div>
     </header>
 
     <div class="tabs">
@@ -73,57 +67,39 @@
     </div>
 
     <div class="content">
-        <!-- Config Camion -->
         <div class="card">
-            <span class="section-title">Configuration Camion (Capacité Rolls)</span>
+            <span class="section-title">Type de Véhicule</span>
             <div class="selector">
                 <button id="cap48" class="btn-sel active" onclick="setCap(48)">Porteur 48</button>
                 <button id="cap50" class="btn-sel" onclick="setCap(50)">Porteur 50</button>
             </div>
         </div>
 
-        <!-- Sélecteur de densité (Uniquement visible pour Éleveur) -->
-        <div id="densitySection" class="card">
-            <span class="section-title">Densité (Canards / Caisse)</span>
-            <div class="selector">
-                <button id="d6" class="btn-sel orange" onclick="setDens(6)">6 canards</button>
-                <button id="d7" class="btn-sel orange active" onclick="setDens(7)">7 canards</button>
-            </div>
-            <div style="font-size: 0.7rem; margin-top: 10px; color: #666;">
-                * En mode GRAS, la densité est fixée à <b>4 / caisse</b>.
-            </div>
-        </div>
-
         <div id="list"></div>
-        <button class="btn-add" onclick="add()">+ Ajouter un lot</button>
+        <button class="btn-add" onclick="add()">+ Ajouter un éleveur</button>
     </div>
 </div>
 
 <div class="footer" id="footer" style="display:none;">
-    <div id="fluxTag" class="info-pill">PRÊT À GAVER (7/CAISSE)</div>
+    <div id="densityTag" class="density-status">CALCUL EN COURS...</div>
     
     <div id="totalDisplay" class="total-display">0 <span>Rolls</span></div>
     
     <div class="grid">
-        <div><label>Nombre Total Canards</label><b id="totalD">0</b></div>
-        <div style="text-align:right;"><label>Place Libre Camion</label><b id="libre">0 canards</b></div>
+        <div><label>Total Canards</label><b id="totalD">0</b></div>
+        <div style="text-align:right;"><label>Place Libre</label><b id="libre">0 canards</b></div>
     </div>
 </div>
 
 <script>
-    let currentMode = 'eleveur'; // 'eleveur' ou 'gras'
+    let currentMode = 'eleveur'; 
     let maxRolls = 48;
-    let densEleveur = 7;
     let count = 0;
 
     function switchTab(mode) {
         currentMode = mode;
         document.getElementById('tabEleveur').classList.toggle('active', mode === 'eleveur');
         document.getElementById('tabGras').classList.toggle('active', mode === 'gras');
-        
-        // Afficher/Masquer le sélecteur 6/7
-        document.getElementById('densitySection').style.display = (mode === 'eleveur') ? 'block' : 'none';
-        
         calc();
     }
 
@@ -131,13 +107,6 @@
         maxRolls = n;
         document.getElementById('cap48').classList.toggle('active', n === 48);
         document.getElementById('cap50').classList.toggle('active', n === 50);
-        calc();
-    }
-
-    function setDens(n) {
-        densEleveur = n;
-        document.getElementById('d6').classList.toggle('active', n === 6);
-        document.getElementById('d7').classList.toggle('active', n === 7);
         calc();
     }
 
@@ -159,34 +128,41 @@
     function calc() {
         const inputs = document.querySelectorAll('.duck-in');
         let totalD = 0;
-        
-        // Déterminer la densité selon l'onglet
-        let currentDens = (currentMode === 'eleveur') ? densEleveur : 4;
-        let perRoll = currentDens * 6;
+        inputs.forEach(i => totalD += parseInt(i.value) || 0);
 
-        // Mise à jour du tag en bas
-        const tag = document.getElementById('fluxTag');
-        if(currentMode === 'eleveur') {
-            tag.innerText = `PRÊT À GAVER (${currentDens}/CAISSE)`;
-            tag.style.background = "var(--gt-orange)";
+        // --- LOGIQUE DE DENSITÉ AUTOMATIQUE ---
+        let density = 7; 
+        let tagText = "";
+
+        if (currentMode === 'gras') {
+            density = 4;
+            tagText = "MODE GRAS : 4 / CAISSE FIXE";
         } else {
-            tag.innerText = `DÉPART GRAS (4/CAISSE)`;
-            tag.style.background = "black";
+            // Mode Éleveur : On teste si 6 passe, sinon on met 7
+            if (totalD <= (maxRolls * 36)) {
+                density = 6;
+                tagText = "MODE CONFORT : 6 / CAISSE";
+            } else {
+                density = 7;
+                tagText = "MODE MAX : 7 / CAISSE (Serré)";
+            }
         }
 
+        let perRoll = density * 6;
+        document.getElementById('densityTag').innerText = tagText;
+
+        // Détail par lot
         inputs.forEach(i => {
             const val = parseInt(i.value) || 0;
-            totalD += val;
             const resBox = i.nextElementSibling;
             if(val > 0) {
                 const rFull = Math.floor(val / perRoll);
                 const rRest = val % perRoll;
-                let text = `📦 ${rFull} Rolls`;
-                if(rRest > 0) text += ` + ${rRest} canards`;
-                resBox.innerHTML = text;
+                resBox.innerHTML = `📦 ${rFull} Rolls` + (rRest > 0 ? ` + ${rRest} canards` : "");
             } else { resBox.innerHTML = "Saisissez un nombre..."; }
         });
 
+        // Bilan total
         const footer = document.getElementById('footer');
         if(totalD > 0) {
             footer.style.display = 'block';
@@ -195,14 +171,13 @@
             const totalRollsNeeded = Math.ceil(totalD / perRoll);
             const remains = (maxRolls * perRoll) - totalD;
 
-            let displayHtml = totalRFull;
-            displayHtml += totalRRest > 0 ? ` <span>Rolls + ${totalRRest} canards</span>` : ` <span>Rolls</span>`;
-            document.getElementById('totalDisplay').innerHTML = displayHtml;
-            
+            document.getElementById('totalDisplay').innerHTML = totalRFull + (totalRRest > 0 ? ` <span>Rolls + ${totalRRest} canards</span>` : ` <span>Rolls</span>`);
             document.getElementById('totalD').innerText = totalD;
             document.getElementById('libre').innerText = remains >= 0 ? remains + " canards" : "SURCHARGE";
             
+            // Couleur de sécurité
             document.getElementById('footer').style.background = (totalRollsNeeded <= maxRolls) ? "var(--gt-navy)" : "#D84C38";
+            document.getElementById('densityTag').style.background = (density === 6) ? "#16a34a" : "var(--gt-orange)";
         } else { footer.style.display = 'none'; }
     }
 
