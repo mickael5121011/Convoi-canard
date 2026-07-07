@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Logistique Canards Pro</title>
+    <style>
+        :root {
+            --blue: #007AFF;
+            --green: #34C759;
+            --orange: #FF9500;
+            --red: #FF3B30;
+            --bg: #F2F2F7;
+        }
+
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #1c1c1e; }
+        .container { max-width: 480px; margin: 0 auto; padding-bottom: 240px; }
+        
+        header { padding: 10px 0; text-align: center; }
+        h1 { font-size: 1.4rem; font-weight: 800; margin: 0; }
+
+        .card { background: #fff; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        .label-mini { font-size: 0.7rem; font-weight: 800; color: #8E8E93; text-transform: uppercase; margin-bottom: 10px; display: block; }
+
+        /* Camion */
+        .truck-selector { display: flex; gap: 10px; }
+        .t-btn { flex: 1; padding: 14px; border-radius: 12px; border: 2px solid #E5E5EA; background: #fff; font-weight: 700; cursor: pointer; }
+        .t-btn.active { border-color: var(--blue); background: var(--blue); color: #fff; }
+
+        .density-info { display: flex; align-items: center; justify-content: center; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; margin-bottom: 15px; text-align: center; }
+        .mode-6 { background: #e8f5e9; color: var(--green); border: 1px solid var(--green); }
+        .mode-7 { background: #fff3e0; color: var(--orange); border: 1px solid var(--orange); }
+
+        /* Éleveurs */
+        .eleveur-card { background: #fff; border-radius: 18px; padding: 18px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-left: 6px solid var(--blue); }
+        .row-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        input { width: 100%; border: 1.5px solid #F2F2F7; padding: 15px; border-radius: 12px; font-size: 1.3rem; font-weight: 800; outline: none; background: #F9F9F9; box-sizing: border-box; }
+        
+        /* Détail par éleveur */
+        .eleveur-res { margin-top: 10px; padding: 10px; background: #F2F2F7; border-radius: 10px; font-size: 0.9rem; font-weight: 700; color: var(--blue); }
+
+        .btn-add { width: 100%; padding: 18px; border-radius: 20px; border: 2px dashed #C7C7CC; background: transparent; color: var(--blue); font-weight: 800; margin-top: 10px; }
+        .btn-del { background: #FF3B30; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+
+        /* Footer Dashboard */
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: #1C1C1E; color: #fff; padding: 25px; border-radius: 30px 30px 0 0; max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); }
+        .total-nb { font-size: 3.5rem; font-weight: 900; color: #fff; line-height: 0.8; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; border-top: 1px solid #3A3A3C; padding-top: 15px; margin-top: 15px; }
+        .grid-item span { display: block; font-size: 0.65rem; color: #8E8E93; text-transform: uppercase; margin-bottom: 2px; }
+        .grid-item b { font-size: 1.1rem; color: #fff; }
+        .highlight { color: var(--green) !important; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>PLAN DE CHARGEMENT</h1>
+    </header>
+
+    <div class="card">
+        <span class="label-mini">Capacité Camion</span>
+        <div class="truck-selector">
+            <button id="b48" class="t-btn active" onclick="setCap(48)">48 ROLLS</button>
+            <button id="b50" class="t-btn" onclick="setCap(50)">50 ROLLS</button>
+        </div>
+    </div>
+
+    <div id="densityBox" class="density-info mode-6">
+        <span id="densityText">Mode Confort : 6 / cagette</span>
+    </div>
+
+    <div id="list"></div>
+    <button class="btn-add" onclick="add()">+ AJOUTER UN LOT / ÉLEVEUR</button>
+</div>
+
+<div class="footer" id="footer" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+        <div>
+            <span class="label-mini" style="color:#aaa">Total Rolls Camion</span>
+            <div id="totalR" class="total-nb">0</div>
+        </div>
+        <div id="status" style="font-weight:900; font-size:0.75rem; padding:6px 12px; border-radius:8px;">OK</div>
+    </div>
+
+    <div class="grid">
+        <div class="grid-item">
+            <span>Dernier Roll (Fin de lot)</span>
+            <b id="lastRoll" class="highlight">0 canards</b>
+        </div>
+        <div class="grid-item" style="text-align:right;">
+            <span>Place libre</span>
+            <b id="libre">0 canards</b>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cap = 48;
+    let eleveurCount = 0;
+
+    function setCap(n) {
+        cap = n;
+        document.getElementById('b48').className = n === 48 ? 't-btn active' : 't-btn';
+        document.getElementById('b50').className = n === 50 ? 't-btn active' : 't-btn';
+        calc();
+    }
+
+    function add() {
+        eleveurCount++;
+        const id = Date.now();
+        const div = document.createElement('div');
+        div.className = 'eleveur-card';
+        div.id = id;
+        div.innerHTML = `
+            <div class="row-top">
+                <span style="font-weight:800; color:var(--blue)">ÉLEVEUR ${eleveurCount}</span>
+                <button class="btn-del" onclick="document.getElementById(${id}).remove(); calc();">✕</button>
+            </div>
+            <input type="number" placeholder="Nombre canards" class="duck-in" inputmode="numeric" oninput="calc()">
+            <div class="eleveur-res" id="res-${id}">En attente...</div>
+        `;
+        document.getElementById('list').appendChild(div);
+    }
+
+    function calc() {
+        const inputs = document.querySelectorAll('.duck-in');
+        let totalD = 0;
+        inputs.forEach(i => totalD += parseInt(i.value) || 0);
+
+        // RÉGLAGE AUTO DE LA DENSITÉ
+        let density = (totalD <= 1800) ? 6 : 7;
+        let perRoll = density * 6;
+
+        const dBox = document.getElementById('densityBox');
+        const dText = document.getElementById('densityText');
+        if(density === 6) {
+            dBox.className = "density-info mode-6";
+            dText.innerText = "🍃 MODE CONFORT : 6 canards / cagette (36/roll)";
+        } else {
+            dBox.className = "density-info mode-7";
+            dText.innerText = "🚛 MODE MAX : 7 canards / cagette (42/roll)";
+        }
+
+        // CALCULS DÉTAILLÉS PAR ÉLEVEUR
+        inputs.forEach(i => {
+            const val = parseInt(i.value) || 0;
+            const resBox = i.nextElementSibling;
+            if(val > 0) {
+                const rollsNeeded = Math.ceil(val / perRoll);
+                resBox.innerHTML = `📦 <b>${rollsNeeded} Rolls</b> pour ce lot`;
+            } else { resBox.innerHTML = "En attente..."; }
+        });
+
+        // BILAN GLOBAL CAMION
+        const footer = document.getElementById('footer');
+        if(totalD > 0) {
+            footer.style.display = 'block';
+            
+            const totalR = Math.ceil(totalD / perRoll);
+            const remainder = totalD % perRoll || perRoll; 
+            const totalCap = cap * perRoll;
+            const remains = totalCap - totalD;
+
+            document.getElementById('totalR').innerText = totalR;
+            document.getElementById('lastRoll').innerText = remainder + " canards";
+            document.getElementById('libre').innerText = remains >= 0 ? remains + " canards" : "Surcharge !";
+
+            const status = document.getElementById('status');
+            if(totalR <= cap) {
+                status.innerText = "CAMION OK";
+                status.style.background = "var(--green)";
+            } else {
+                status.innerText = "SURCHARGE";
+                status.style.background = "var(--red)";
+            }
+        } else {
+            footer.style.display = 'none';
+        }
+    }
+
+    add();
+</script>
+</body>
+</html>
