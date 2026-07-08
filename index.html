@@ -3,64 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GT Logistique - Plan de Charge</title>
+    <title>GT Logistique Pro</title>
     <style>
         :root {
             --gt-navy: #00385D;
             --gt-orange: #D84C38;
             --gt-bg: #F4F7F9;
             --white: #FFFFFF;
+            --success: #16a34a;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--gt-bg); color: var(--gt-navy); margin: 0; padding: 0; }
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 260px; }
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background-color: var(--gt-bg); 
+            color: var(--gt-navy); 
+            margin: 0; padding: 0; 
+            overflow-x: hidden;
+        }
+
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 240px; }
 
         /* Header */
         header { 
             background: var(--white); padding: 15px 20px; 
             border-bottom: 3px solid var(--gt-navy); 
-            display: flex; justify-content: space-between; align-items: center; 
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
         }
         .logo { font-weight: 900; font-size: 1.2rem; text-transform: uppercase; }
         .logo span { color: var(--gt-orange); }
 
-        .tag-logistique {
-            background: var(--gt-navy); color: white; padding: 6px 12px;
-            border-radius: 4px; font-size: 0.65rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 1px;
+        .btn-reset {
+            background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; padding: 8px 12px;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 800; cursor: pointer;
+            transition: transform 0.2s;
         }
+        .btn-reset:active { transform: scale(0.9); }
 
-        /* Onglets */
-        .tabs { display: flex; background: var(--gt-navy); }
-        .tab-btn { flex: 1; padding: 15px; border: none; color: rgba(255,255,255,0.6); background: transparent; font-weight: 800; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; }
-        .tab-btn.active { color: white; background: rgba(255,255,255,0.1); border-bottom: 4px solid var(--gt-orange); }
+        /* Tabs */
+        .tabs { display: flex; background: var(--gt-navy); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .tab-btn { 
+            flex: 1; padding: 15px; border: none; color: rgba(255,255,255,0.6); 
+            background: transparent; font-weight: 800; cursor: pointer; 
+            font-size: 0.75rem; text-transform: uppercase; transition: all 0.3s ease;
+        }
+        .tab-btn.active { color: white; background: rgba(255,255,255,0.15); border-bottom: 4px solid var(--gt-orange); }
 
         .content { padding: 15px; }
-        .card { background: var(--white); padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+
+        /* Cartes */
+        .card { 
+            background: var(--white); padding: 20px; margin-bottom: 15px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-radius: 12px;
+        }
+
         .section-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; color: #888; }
 
-        /* Camion */
+        /* Camion Selector */
         .selector { display: flex; gap: 8px; }
-        .btn-sel { flex: 1; padding: 12px; border: 1px solid #DDD; background: #F9F9F9; font-weight: 700; cursor: pointer; }
+        .btn-sel { 
+            flex: 1; padding: 12px; border: 2px solid #E5E7EB; background: #F9F9F9; 
+            font-weight: 700; cursor: pointer; border-radius: 8px; transition: all 0.2s;
+        }
         .btn-sel.active { background: var(--gt-navy); color: white; border-color: var(--gt-navy); }
 
-        /* Lots */
-        .lot-card { background: var(--white); border-left: 5px solid var(--gt-orange); padding: 15px; margin-bottom: 10px; position: relative; }
-        input { width: 100%; padding: 15px; border: 1px solid #CCC; font-size: 1.5rem; font-weight: bold; outline: none; box-sizing: border-box; background: #F9F9F9; color: var(--gt-navy); }
-        .lot-res { margin-top: 10px; font-size: 0.95rem; font-weight: 700; background: #F0F4F7; padding: 10px; border-radius: 4px; }
+        /* Destination Cards */
+        .lot-card { 
+            background: var(--white); border-left: 6px solid var(--gt-orange); 
+            padding: 20px; margin-bottom: 12px; position: relative; 
+            border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            animation: cardEnter 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+        
+        input { 
+            width: 100%; padding: 15px; border: 2px solid #E5E7EB; font-size: 1.5rem; 
+            font-weight: bold; outline: none; box-sizing: border-box; 
+            background: #FAFAFA; border-radius: 10px; color: var(--gt-navy);
+        }
+        input:focus { border-color: var(--gt-orange); background: #FFF; }
 
-        .btn-add { width: 100%; background: var(--gt-navy); color: white; border: none; padding: 20px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; border-radius: 4px; }
-        .btn-del { color: #AAA; background: none; border: none; font-size: 1.2rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
+        .lot-res { 
+            margin-top: 12px; font-size: 0.95rem; font-weight: 700; 
+            background: #F0F4F7; padding: 12px; border-radius: 8px; 
+            color: var(--gt-navy);
+        }
+
+        .btn-add { 
+            width: 100%; background: var(--gt-navy); color: white; border: none; 
+            padding: 20px; font-weight: 900; text-transform: uppercase; 
+            cursor: pointer; margin-top: 10px; border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-del { color: #CCC; background: none; border: none; font-size: 1.4rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
 
         /* Footer Dashboard */
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 25px; max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); border-radius: 25px 25px 0 0; }
-        .density-status { background: #16a34a; color: white; padding: 4px 10px; font-size: 0.7rem; font-weight: 900; margin-bottom: 12px; display: inline-block; border-radius: 3px; }
-        .total-display { font-size: 2.4rem; font-weight: 900; line-height: 1; }
-        .total-display span { font-size: 1rem; color: var(--gt-orange); margin-left: 5px; }
+        .footer { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: var(--gt-navy); color: white; padding: 25px; 
+            max-width: 500px; margin: 0 auto; 
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.3); 
+            border-radius: 30px 30px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            z-index: 200;
+        }
+        .footer.visible { transform: translateY(0); }
+
+        .footer-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 5px; display: block; }
+
+        .density-status { 
+            background: var(--success); color: white; padding: 5px 12px; 
+            font-size: 0.7rem; font-weight: 900; margin-bottom: 12px; 
+            display: inline-block; border-radius: 4px;
+        }
         
+        .total-display { font-size: 2.5rem; font-weight: 900; line-height: 1; transition: all 0.3s; }
+        .total-display span { font-size: 1.1rem; color: var(--gt-orange); margin-left: 5px; }
+
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .grid label { display: block; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
         .grid b { font-size: 1.1rem; }
+
+        @keyframes cardEnter { 
+            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .pulse { animation: pulseAnim 0.3s ease-in-out; }
+        @keyframes pulseAnim { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -68,12 +138,12 @@
 <div class="container">
     <header>
         <div class="logo">GT<span>solutions</span></div>
-        <div class="tag-logistique">LOGISTIQUE</div>
+        <button class="btn-reset" onclick="resetApp()">🗑️ Reset</button>
     </header>
 
     <div class="tabs">
-        <button id="tabEleveur" class="tab-btn active" onclick="switchTab('eleveur')">1. Éleveur (Auto)</button>
-        <button id="tabGras" class="tab-btn" onclick="switchTab('gras')">2. Départ Gras (4)</button>
+        <button id="tabEleveur" class="tab-btn active" onclick="switchTab('eleveur')">Prêt à gaver</button>
+        <button id="tabGras" class="tab-btn" onclick="switchTab('gras')">Départ Gras</button>
     </div>
 
     <div class="content">
@@ -87,22 +157,23 @@
 
         <div id="list"></div>
 
-        <button class="btn-add" onclick="add()">+ Ajouter un éleveur / lot</button>
+        <button class="btn-add" onclick="add()">+ Ajouter un Gaveur</button>
         
-        <div style="text-align: center; margin-top: 40px; opacity: 0.4; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
-            Système d'optimisation de chargement
+        <div style="text-align: center; margin-top: 40px; opacity: 0.4; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+            Optimisation Temps Réel
         </div>
     </div>
 </div>
 
-<div class="footer" id="footer" style="display:none;">
+<div class="footer" id="footer">
+    <span class="footer-label">À charger chez l'Éleveur</span>
     <div id="densityTag" class="density-status">MODE CONFORT : 6</div>
     
     <div id="totalDisplay" class="total-display">0 <span>Rolls</span></div>
     
     <div class="grid">
-        <div><label>Nombre Canards</label><b id="totalD">0</b></div>
-        <div style="text-align:right;"><label>Place Libre Camion</label><b id="libre">0 canards</b></div>
+        <div><label>Total Canards</label><b id="totalD">0</b></div>
+        <div style="text-align:right;"><label>Place Libre</label><b id="libre">0 canards</b></div>
     </div>
 </div>
 
@@ -110,6 +181,13 @@
     let currentMode = 'eleveur'; 
     let maxRolls = 48;
     let count = 0;
+
+    function resetApp() {
+        if(confirm("Effacer toutes les données ?")) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
 
     function switchTab(mode) {
         currentMode = mode;
@@ -120,55 +198,59 @@
 
     function setCap(n) {
         maxRolls = n;
-        document.getElementById('cap48').classList.toggle('active', n === 48);
-        document.getElementById('cap50').classList.toggle('active', n === 50);
+        document.getElementById('cap48').className = n === 48 ? 'btn-sel active' : 'btn-sel';
+        document.getElementById('cap50').className = n === 50 ? 'btn-sel active' : 'btn-sel';
         calc();
     }
 
-    function add() {
+    function add(initialVal = "") {
         count++;
-        const id = Date.now();
+        const id = Date.now() + Math.random();
         const div = document.createElement('div');
         div.className = 'lot-card';
         div.id = id;
         div.innerHTML = `
-            <button class="btn-del" onclick="document.getElementById(${id}).remove(); calc();">✕</button>
-            <span class="section-title">Lot n°${count}</span>
-            <input type="number" placeholder="0" class="duck-in" inputmode="numeric" oninput="calc()">
+            <button class="btn-del" onclick="removeLot('${id}')">✕</button>
+            <span class="section-title" id="title-${id}">Destination Gaveur</span>
+            <input type="number" placeholder="0" class="duck-in" inputmode="numeric" oninput="calc()" value="${initialVal}">
             <div class="lot-res">En attente...</div>
         `;
         document.getElementById('list').appendChild(div);
+        updateLabels();
+    }
+
+    function removeLot(id) {
+        document.getElementById(id).remove();
+        updateLabels();
+        calc();
+    }
+
+    function updateLabels() {
+        const titles = document.querySelectorAll('[id^="title-"]');
+        titles.forEach((t, i) => t.innerText = `Destination Gaveur n°${i+1}`);
     }
 
     function calc() {
         const inputs = document.querySelectorAll('.duck-in');
+        const totalDisplay = document.getElementById('totalDisplay');
         let totalD = 0;
-        inputs.forEach(i => totalD += parseInt(i.value) || 0);
+        let values = [];
+        
+        inputs.forEach(i => {
+            totalD += parseInt(i.value) || 0;
+            values.push(i.value);
+        });
+
+        localStorage.setItem('duckValues', JSON.stringify(values));
 
         let density = 7; 
-        let tagText = "";
-        let tagColor = "#16a34a";
-
-        if (currentMode === 'gras') {
-            density = 4;
-            tagText = "DENSITÉ FIXE : 4 / CAISSE";
-            tagColor = "#000";
-        } else {
-            // Mode Éleveur : Auto-switch 6 ou 7 selon remplissage
-            if (totalD <= (maxRolls * 36)) {
-                density = 6;
-                tagText = "MODE CONFORT : 6 / CAISSE";
-                tagColor = "#16a34a";
-            } else {
-                density = 7;
-                tagText = "MODE MAX : 7 / CAISSE (Serré)";
-                tagColor = "#D84C38";
-            }
-        }
+        if (currentMode === 'gras') { density = 4; }
+        else { density = (totalD <= (maxRolls * 36)) ? 6 : 7; }
 
         let perRoll = density * 6;
-        document.getElementById('densityTag').innerText = tagText;
-        document.getElementById('densityTag').style.background = tagColor;
+        const tag = document.getElementById('densityTag');
+        tag.innerText = (currentMode === 'gras') ? "MODE GRAS : 4" : (density === 6 ? "MODE CONFORT : 6" : "MODE MAX : 7");
+        tag.style.background = (currentMode === 'gras') ? "#000" : (density === 6 ? "var(--success)" : "var(--gt-orange)");
 
         inputs.forEach(i => {
             const val = parseInt(i.value) || 0;
@@ -176,26 +258,41 @@
             if(val > 0) {
                 const rFull = Math.floor(val / perRoll);
                 const rRest = val % perRoll;
-                resBox.innerHTML = `📦 ${rFull} Rolls` + (rRest > 0 ? ` + ${rRest} canards` : "");
+                resBox.innerHTML = `📉 DÉCHARGER : <b>${rFull} Rolls</b>` + (rRest > 0 ? ` + ${rRest} canards` : "");
             } else { resBox.innerHTML = "En attente..."; }
         });
 
         const footer = document.getElementById('footer');
         if(totalD > 0) {
-            footer.style.display = 'block';
+            footer.classList.add('visible');
             const totalRFull = Math.floor(totalD / perRoll);
             const totalRRest = totalD % perRoll;
             const totalRollsNeeded = Math.ceil(totalD / perRoll);
             const remains = (maxRolls * perRoll) - totalD;
 
-            document.getElementById('totalDisplay').innerHTML = totalRFull + (totalRRest > 0 ? ` <span>Rolls + ${totalRRest} canards</span>` : ` <span>Rolls</span>`);
-            document.getElementById('totalD').innerText = totalD;
+            totalDisplay.classList.remove('pulse');
+            void totalDisplay.offsetWidth;
+            totalDisplay.classList.add('pulse');
+
+            totalDisplay.innerHTML = totalRFull + (totalRRest > 0 ? ` <span>Rolls + ${totalRRest} canards</span>` : ` <span>Rolls</span>`);
+            document.getElementById('totalD').innerText = totalD + " canards";
             document.getElementById('libre').innerText = (remains >= 0) ? remains + " canards" : "SURCHARGE";
-            document.getElementById('footer').style.background = (totalRollsNeeded <= maxRolls) ? "var(--gt-navy)" : "var(--gt-orange)";
-        } else { footer.style.display = 'none'; }
+            
+            footer.style.background = (totalRollsNeeded <= maxRolls) ? "var(--gt-navy)" : "#DC2626";
+        } else { 
+            footer.classList.remove('visible');
+        }
     }
 
-    add();
+    window.onload = function() {
+        const savedValues = JSON.parse(localStorage.getItem('duckValues'));
+        if(savedValues && savedValues.length > 0) {
+            savedValues.forEach(val => add(val));
+            calc();
+        } else {
+            add();
+        }
+    };
 </script>
 </body>
 </html>
