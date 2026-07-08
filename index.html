@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GT Logistique Pro</title>
+    <meta name="robots" content="noindex, nofollow">
+    <title>GT Logistique - Privé</title>
     <style>
         :root {
             --gt-navy: #00385D;
@@ -13,129 +14,85 @@
             --success: #16a34a;
         }
 
-        body { 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            background-color: var(--gt-bg); 
-            color: var(--gt-navy); 
-            margin: 0; padding: 0; 
-            overflow-x: hidden;
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--gt-bg); margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* --- ECRAN DE VERROUILLAGE --- */
+        #lock-screen {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: var(--gt-navy); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: white; text-align: center;
         }
+        #lock-screen input { width: 220px; text-align: center; margin-top: 25px; padding: 15px; border-radius: 10px; border: none; font-size: 1.2rem; font-weight: bold; }
+        #lock-screen button { margin-top: 20px; padding: 12px 40px; background: var(--gt-orange); color: white; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; transition: transform 0.2s; }
+        #lock-screen button:active { transform: scale(0.95); }
 
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 240px; }
-
-        /* Header */
+        /* --- APPLICATION --- */
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 260px; display: none; }
+        
         header { 
-            background: var(--white); padding: 15px 20px; 
-            border-bottom: 3px solid var(--gt-navy); 
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100;
+            background: var(--white); padding: 15px 20px; border-bottom: 3px solid var(--gt-navy); 
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; 
         }
         .logo { font-weight: 900; font-size: 1.2rem; text-transform: uppercase; }
         .logo span { color: var(--gt-orange); }
 
-        .btn-reset {
-            background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5; padding: 8px 12px;
-            border-radius: 6px; font-size: 0.7rem; font-weight: 800; cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .btn-reset:active { transform: scale(0.9); }
+        .btn-reset { background: #f1f1f1; border: 1px solid #ccc; padding: 8px 12px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; cursor: pointer; color: #666; }
 
-        /* Tabs */
         .tabs { display: flex; background: var(--gt-navy); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .tab-btn { 
-            flex: 1; padding: 15px; border: none; color: rgba(255,255,255,0.6); 
-            background: transparent; font-weight: 800; cursor: pointer; 
-            font-size: 0.75rem; text-transform: uppercase; transition: all 0.3s ease;
-        }
+        .tab-btn { flex: 1; padding: 18px; border: none; color: rgba(255,255,255,0.6); background: transparent; font-weight: 800; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; transition: 0.3s; }
         .tab-btn.active { color: white; background: rgba(255,255,255,0.15); border-bottom: 4px solid var(--gt-orange); }
 
-        .content { padding: 15px; }
-
-        /* Cartes */
-        .card { 
-            background: var(--white); padding: 20px; margin-bottom: 15px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-radius: 12px;
-        }
-
-        .section-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; color: #888; }
-
-        /* Camion Selector */
-        .selector { display: flex; gap: 8px; }
-        .btn-sel { 
-            flex: 1; padding: 12px; border: 2px solid #E5E7EB; background: #F9F9F9; 
-            font-weight: 700; cursor: pointer; border-radius: 8px; transition: all 0.2s;
-        }
-        .btn-sel.active { background: var(--gt-navy); color: white; border-color: var(--gt-navy); }
-
-        /* Destination Cards */
+        .card { background: var(--white); padding: 20px; margin: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-radius: 12px; }
         .lot-card { 
             background: var(--white); border-left: 6px solid var(--gt-orange); 
-            padding: 20px; margin-bottom: 12px; position: relative; 
-            border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            animation: cardEnter 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            padding: 20px; margin: 0 15px 12px 15px; position: relative; 
+            border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            animation: cardEnter 0.4s ease-out; 
         }
         
-        input { 
-            width: 100%; padding: 15px; border: 2px solid #E5E7EB; font-size: 1.5rem; 
-            font-weight: bold; outline: none; box-sizing: border-box; 
-            background: #FAFAFA; border-radius: 10px; color: var(--gt-navy);
-        }
+        .section-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; color: #888; }
+        
+        input[type="number"] { width: 100%; padding: 15px; border: 2px solid #E5E7EB; font-size: 1.5rem; font-weight: bold; outline: none; box-sizing: border-box; background: #FAFAFA; border-radius: 10px; color: var(--gt-navy); }
         input:focus { border-color: var(--gt-orange); background: #FFF; }
 
-        .lot-res { 
-            margin-top: 12px; font-size: 0.95rem; font-weight: 700; 
-            background: #F0F4F7; padding: 12px; border-radius: 8px; 
-            color: var(--gt-navy);
-        }
+        .lot-res { margin-top: 12px; font-size: 0.95rem; font-weight: 700; background: #F0F4F7; padding: 12px; border-radius: 8px; color: var(--gt-navy); }
 
-        .btn-add { 
-            width: 100%; background: var(--gt-navy); color: white; border: none; 
-            padding: 20px; font-weight: 900; text-transform: uppercase; 
-            cursor: pointer; margin-top: 10px; border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
+        .btn-add { width: calc(100% - 30px); margin: 10px 15px; background: var(--gt-navy); color: white; border: none; padding: 20px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 12px; transition: transform 0.2s; }
+        .btn-add:active { transform: scale(0.98); }
         .btn-del { color: #CCC; background: none; border: none; font-size: 1.4rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
 
-        /* Footer Dashboard */
+        /* FOOTER */
         .footer { 
-            position: fixed; bottom: 0; left: 0; right: 0; 
-            background: var(--gt-navy); color: white; padding: 25px; 
-            max-width: 500px; margin: 0 auto; 
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.3); 
-            border-radius: 30px 30px 0 0;
-            transform: translateY(100%);
-            transition: transform 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-            z-index: 200;
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 25px; 
+            max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); border-radius: 30px 30px 0 0;
+            display: none; z-index: 200;
         }
-        .footer.visible { transform: translateY(0); }
+        .footer.visible { display: block; }
 
-        .footer-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 5px; display: block; }
-
-        .density-status { 
-            background: var(--success); color: white; padding: 5px 12px; 
-            font-size: 0.7rem; font-weight: 900; margin-bottom: 12px; 
-            display: inline-block; border-radius: 4px;
-        }
-        
-        .total-display { font-size: 2.5rem; font-weight: 900; line-height: 1; transition: all 0.3s; }
-        .total-display span { font-size: 1.1rem; color: var(--gt-orange); margin-left: 5px; }
+        .density-status { background: var(--success); color: white; padding: 6px 12px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; display: inline-block; border-radius: 4px; text-transform: uppercase; }
+        .total-display { font-size: 2.2rem; font-weight: 900; line-height: 1; }
+        .total-display span { font-size: 0.9rem; color: var(--gt-orange); margin-left: 5px; font-weight: 700; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .grid label { display: block; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
         .grid b { font-size: 1.1rem; }
 
-        @keyframes cardEnter { 
-            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .pulse { animation: pulseAnim 0.3s ease-in-out; }
-        @keyframes pulseAnim { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+        @keyframes cardEnter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="container">
+<!-- ECRAN DE SECURITE -->
+<div id="lock-screen">
+    <div class="logo" style="font-size: 2rem;">GT<span>solutions</span></div>
+    <p style="margin-top: 20px; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px;">ACCÈS PRIVÉ CHAUFFEURS</p>
+    <input type="password" id="pass" placeholder="Code secret">
+    <button onclick="checkPass()">ENTRER DANS L'APPLI</button>
+</div>
+
+<!-- L'APPLICATION -->
+<div class="container" id="main-app">
     <header>
         <div class="logo">GT<span>solutions</span></div>
         <button class="btn-reset" onclick="resetApp()">🗑️ Reset</button>
@@ -146,27 +103,21 @@
         <button id="tabGras" class="tab-btn" onclick="switchTab('gras')">Départ Gras</button>
     </div>
 
-    <div class="content">
-        <div class="card">
-            <span class="section-title">Type de Véhicule</span>
-            <div class="selector">
-                <button id="cap48" class="btn-sel active" onclick="setCap(48)">Porteur 48</button>
-                <button id="cap50" class="btn-sel" onclick="setCap(50)">Porteur 50</button>
-            </div>
-        </div>
-
-        <div id="list"></div>
-
-        <button class="btn-add" onclick="add()">+ Ajouter un Gaveur</button>
-        
-        <div style="text-align: center; margin-top: 40px; opacity: 0.4; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
-            Optimisation Temps Réel
+    <div class="card">
+        <span class="section-title">Choix du Véhicule</span>
+        <div style="display:flex; gap:10px;">
+            <button id="cap48" style="flex:1; padding:15px; border-radius:10px; border:1px solid #DDD; font-weight:bold; cursor:pointer;" onclick="setCap(48)">Porteur 48</button>
+            <button id="cap50" style="flex:1; padding:15px; border-radius:10px; border:1px solid #DDD; font-weight:bold; cursor:pointer;" onclick="setCap(50)">Porteur 50</button>
         </div>
     </div>
+
+    <div id="list"></div>
+    <button class="btn-add" id="add-btn" onclick="add()">+ Ajouter une destination</button>
 </div>
 
+<!-- BILAN FIXE -->
 <div class="footer" id="footer">
-    <span class="footer-label">À charger chez l'Éleveur</span>
+    <span id="footer-title" style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 5px; display: block;">Résumé de la tournée</span>
     <div id="densityTag" class="density-status">MODE CONFORT : 6</div>
     
     <div id="totalDisplay" class="total-display">0 <span>Rolls</span></div>
@@ -178,12 +129,21 @@
 </div>
 
 <script>
+    // MOT DE PASSE MIS À JOUR
+    const passwordCorrect = "GT2026";
     let currentMode = 'eleveur'; 
     let maxRolls = 48;
-    let count = 0;
+
+    function checkPass() {
+        if(document.getElementById('pass').value === passwordCorrect) {
+            document.getElementById('lock-screen').style.display = "none";
+            document.getElementById('main-app').style.display = "block";
+            init();
+        } else { alert("Code incorrect"); }
+    }
 
     function resetApp() {
-        if(confirm("Effacer toutes les données ?")) {
+        if(confirm("Effacer les données de la tournée ?")) {
             localStorage.clear();
             location.reload();
         }
@@ -193,106 +153,87 @@
         currentMode = mode;
         document.getElementById('tabEleveur').classList.toggle('active', mode === 'eleveur');
         document.getElementById('tabGras').classList.toggle('active', mode === 'gras');
+        document.getElementById('add-btn').innerText = (mode === 'eleveur') ? "+ Ajouter un Gaveur" : "+ Ajouter un Abattoir";
+        updateLabels();
         calc();
     }
 
     function setCap(n) {
         maxRolls = n;
-        document.getElementById('cap48').className = n === 48 ? 'btn-sel active' : 'btn-sel';
-        document.getElementById('cap50').className = n === 50 ? 'btn-sel active' : 'btn-sel';
+        document.getElementById('cap48').style.background = n === 48 ? 'var(--gt-navy)' : '#F9F9F9';
+        document.getElementById('cap48').style.color = n === 48 ? 'white' : 'var(--gt-navy)';
+        document.getElementById('cap50').style.background = n === 50 ? 'var(--gt-navy)' : '#F9F9F9';
+        document.getElementById('cap50').style.color = n === 50 ? 'white' : 'var(--gt-navy)';
         calc();
     }
 
-    function add(initialVal = "") {
-        count++;
+    function add(val = "") {
         const id = Date.now() + Math.random();
         const div = document.createElement('div');
         div.className = 'lot-card';
         div.id = id;
         div.innerHTML = `
-            <button class="btn-del" onclick="removeLot('${id}')">✕</button>
-            <span class="section-title" id="title-${id}">Destination Gaveur</span>
-            <input type="number" placeholder="0" class="duck-in" inputmode="numeric" oninput="calc()" value="${initialVal}">
+            <button onclick="document.getElementById('${id}').remove(); updateLabels(); calc();" class="btn-del">✕</button>
+            <span class="lot-title-text" style="font-size:0.7rem; font-weight:800; color:var(--gt-orange); text-transform:uppercase;">Gaveur</span>
+            <input type="number" placeholder="0" class="duck-in" inputmode="numeric" oninput="calc()" value="${val}">
             <div class="lot-res">En attente...</div>
         `;
         document.getElementById('list').appendChild(div);
         updateLabels();
     }
 
-    function removeLot(id) {
-        document.getElementById(id).remove();
-        updateLabels();
-        calc();
-    }
-
     function updateLabels() {
-        const titles = document.querySelectorAll('[id^="title-"]');
-        titles.forEach((t, i) => t.innerText = `Destination Gaveur n°${i+1}`);
+        const titles = document.querySelectorAll('.lot-title-text');
+        const term = (currentMode === 'eleveur') ? 'Gaveur' : 'Abattoir';
+        titles.forEach((t, i) => t.innerText = `Destination ${term} n°${i+1}`);
+        const footerTitle = document.getElementById('footer-title');
+        footerTitle.innerText = (currentMode === 'eleveur') ? "À CHARGER CHEZ L'ÉLEVEUR" : "CHARGEMENT GRAS TOTAL";
     }
 
     function calc() {
         const inputs = document.querySelectorAll('.duck-in');
-        const totalDisplay = document.getElementById('totalDisplay');
-        let totalD = 0;
-        let values = [];
-        
-        inputs.forEach(i => {
-            totalD += parseInt(i.value) || 0;
-            values.push(i.value);
-        });
-
+        let totalD = 0; let values = [];
+        inputs.forEach(i => { totalD += parseInt(i.value) || 0; values.push(i.value); });
         localStorage.setItem('duckValues', JSON.stringify(values));
 
-        let density = 7; 
-        if (currentMode === 'gras') { density = 4; }
-        else { density = (totalD <= (maxRolls * 36)) ? 6 : 7; }
+        let dens = (currentMode === 'gras') ? 4 : (totalD <= (maxRolls * 36) ? 6 : 7);
+        let perR = dens * 6;
 
-        let perRoll = density * 6;
         const tag = document.getElementById('densityTag');
-        tag.innerText = (currentMode === 'gras') ? "MODE GRAS : 4" : (density === 6 ? "MODE CONFORT : 6" : "MODE MAX : 7");
-        tag.style.background = (currentMode === 'gras') ? "#000" : (density === 6 ? "var(--success)" : "var(--gt-orange)");
+        tag.innerText = (currentMode === 'gras') ? "MODE GRAS : 4" : (dens === 6 ? "MODE CONFORT : 6" : "MODE MAX : 7");
+        tag.style.background = (currentMode === 'gras') ? "#000" : (dens === 6 ? "var(--success)" : "var(--gt-orange)");
 
         inputs.forEach(i => {
             const val = parseInt(i.value) || 0;
-            const resBox = i.nextElementSibling;
+            const res = i.nextElementSibling;
             if(val > 0) {
-                const rFull = Math.floor(val / perRoll);
-                const rRest = val % perRoll;
-                resBox.innerHTML = `📉 DÉCHARGER : <b>${rFull} Rolls</b>` + (rRest > 0 ? ` + ${rRest} canards` : "");
-            } else { resBox.innerHTML = "En attente..."; }
+                const rf = Math.floor(val/perR); const rr = val%perR;
+                // CHANGÉ : "canards" en entier ici
+                res.innerHTML = `📦 <b>${rf} Rolls` + (rr > 0 ? ` + ${rr} canards` : "") + `</b>`;
+            } else res.innerHTML = "En attente...";
         });
 
         const footer = document.getElementById('footer');
         if(totalD > 0) {
             footer.classList.add('visible');
-            const totalRFull = Math.floor(totalD / perRoll);
-            const totalRRest = totalD % perRoll;
-            const totalRollsNeeded = Math.ceil(totalD / perRoll);
-            const remains = (maxRolls * perRoll) - totalD;
+            const rf = Math.floor(totalD/perR); const rr = totalD%perR;
+            const needed = Math.ceil(totalD/perR);
+            const remains = (maxRolls * perR) - totalD;
 
-            totalDisplay.classList.remove('pulse');
-            void totalDisplay.offsetWidth;
-            totalDisplay.classList.add('pulse');
-
-            totalDisplay.innerHTML = totalRFull + (totalRRest > 0 ? ` <span>Rolls + ${totalRRest} canards</span>` : ` <span>Rolls</span>`);
+            // CHANGÉ : "canards" en entier ici
+            document.getElementById('totalDisplay').innerHTML = rf + (rr > 0 ? ` <span>Rolls + ${rr} canards</span>` : ` <span>Rolls</span>`);
             document.getElementById('totalD').innerText = totalD + " canards";
             document.getElementById('libre').innerText = (remains >= 0) ? remains + " canards" : "SURCHARGE";
-            
-            footer.style.background = (totalRollsNeeded <= maxRolls) ? "var(--gt-navy)" : "#DC2626";
-        } else { 
-            footer.classList.remove('visible');
-        }
+            footer.style.background = (needed <= maxRolls) ? "var(--gt-navy)" : "#DC2626";
+        } else { footer.classList.remove('visible'); }
     }
 
-    window.onload = function() {
-        const savedValues = JSON.parse(localStorage.getItem('duckValues'));
-        if(savedValues && savedValues.length > 0) {
-            savedValues.forEach(val => add(val));
-            calc();
-        } else {
-            add();
-        }
-    };
+    function init() {
+        setCap(48);
+        const saved = JSON.parse(localStorage.getItem('duckValues'));
+        if(saved && saved.length > 0) saved.forEach(v => add(v)); else add();
+        calc();
+    }
 </script>
 </body>
 </html>
