@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
-    <title>GT Logistique - Privé</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>GT Logistique - Expert Tournée</title>
     <style>
         :root {
             --gt-navy: #00385D;
@@ -16,7 +20,7 @@
 
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--gt-bg); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* --- ECRAN DE VERROUILLAGE --- */
+        /* --- SECURITE --- */
         #lock-screen {
             position: fixed; top:0; left:0; width:100%; height:100%;
             background: var(--gt-navy); z-index: 9999;
@@ -24,11 +28,10 @@
             color: white; text-align: center;
         }
         #lock-screen input { width: 220px; text-align: center; margin-top: 25px; padding: 15px; border-radius: 10px; border: none; font-size: 1.2rem; font-weight: bold; }
-        #lock-screen button { margin-top: 20px; padding: 12px 40px; background: var(--gt-orange); color: white; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; transition: transform 0.2s; }
-        #lock-screen button:active { transform: scale(0.95); }
+        #lock-screen button { margin-top: 20px; padding: 12px 40px; background: var(--gt-orange); color: white; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
 
-        /* --- APPLICATION --- */
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 260px; display: none; }
+        /* --- APPLI --- */
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 280px; display: none; }
         
         header { 
             background: var(--white); padding: 15px 20px; border-bottom: 3px solid var(--gt-navy); 
@@ -62,7 +65,7 @@
         .btn-add:active { transform: scale(0.98); }
         .btn-del { color: #CCC; background: none; border: none; font-size: 1.4rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
 
-        /* FOOTER */
+        /* FOOTER DASHBOARD */
         .footer { 
             position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 25px; 
             max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); border-radius: 30px 30px 0 0;
@@ -71,19 +74,20 @@
         .footer.visible { display: block; }
 
         .density-status { background: var(--success); color: white; padding: 6px 12px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; display: inline-block; border-radius: 4px; text-transform: uppercase; }
-        .total-display { font-size: 2.2rem; font-weight: 900; line-height: 1; }
+        .total-display { font-size: 2.3rem; font-weight: 900; line-height: 1; }
         .total-display span { font-size: 0.9rem; color: var(--gt-orange); margin-left: 5px; font-weight: 700; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .grid label { display: block; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
         .grid b { font-size: 1.1rem; }
 
+        .complement-box { background: rgba(216, 76, 56, 0.15); border: 1px solid var(--gt-orange); border-radius: 8px; padding: 10px; margin-top: 10px; color: #fff; font-size: 0.85rem; text-align: center; }
+
         @keyframes cardEnter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<!-- ECRAN DE SECURITE -->
 <div id="lock-screen">
     <div class="logo" style="font-size: 2rem;">GT<span>solutions</span></div>
     <p style="margin-top: 20px; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px;">ACCÈS PRIVÉ CHAUFFEURS</p>
@@ -91,7 +95,6 @@
     <button onclick="checkPass()">ENTRER DANS L'APPLI</button>
 </div>
 
-<!-- L'APPLICATION -->
 <div class="container" id="main-app">
     <header>
         <div class="logo">GT<span>solutions</span></div>
@@ -115,7 +118,6 @@
     <button class="btn-add" id="add-btn" onclick="add()">+ Ajouter une destination</button>
 </div>
 
-<!-- BILAN FIXE -->
 <div class="footer" id="footer">
     <span id="footer-title" style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 5px; display: block;">Résumé de la tournée</span>
     <div id="densityTag" class="density-status">MODE CONFORT : 6</div>
@@ -123,13 +125,16 @@
     <div id="totalDisplay" class="total-display">0 <span>Rolls</span></div>
     
     <div class="grid">
-        <div><label>Total Canards</label><b id="totalD">0</b></div>
-        <div style="text-align:right;"><label>Place Libre</label><b id="libre">0 canards</b></div>
+        <div><label>Total chargés</label><b id="totalD">0 canards</b></div>
+        <div style="text-align:right;"><label>Place encore libre</label><b id="libre">0 canards</b></div>
+    </div>
+
+    <div id="solde-rolls" class="complement-box">
+        Solde camion : <b>0 rolls</b> restants à charger.
     </div>
 </div>
 
 <script>
-    // MOT DE PASSE MIS À JOUR
     const passwordCorrect = "GT2026";
     let currentMode = 'eleveur'; 
     let maxRolls = 48;
@@ -200,7 +205,7 @@
         let perR = dens * 6;
 
         const tag = document.getElementById('densityTag');
-        tag.innerText = (currentMode === 'gras') ? "MODE GRAS : 4" : (dens === 6 ? "MODE CONFORT : 6" : "MODE MAX : 7");
+        tag.innerText = (currentMode === 'gras') ? "MODE GRAS : 4 / CAISSE" : (dens === 6 ? "MODE CONFORT : 6" : "MODE MAX : 7");
         tag.style.background = (currentMode === 'gras') ? "#000" : (dens === 6 ? "var(--success)" : "var(--gt-orange)");
 
         inputs.forEach(i => {
@@ -208,7 +213,6 @@
             const res = i.nextElementSibling;
             if(val > 0) {
                 const rf = Math.floor(val/perR); const rr = val%perR;
-                // CHANGÉ : "canards" en entier ici
                 res.innerHTML = `📦 <b>${rf} Rolls` + (rr > 0 ? ` + ${rr} canards` : "") + `</b>`;
             } else res.innerHTML = "En attente...";
         });
@@ -217,14 +221,21 @@
         if(totalD > 0) {
             footer.classList.add('visible');
             const rf = Math.floor(totalD/perR); const rr = totalD%perR;
-            const needed = Math.ceil(totalD/perR);
-            const remains = (maxRolls * perR) - totalD;
+            const neededRolls = Math.ceil(totalD/perR);
+            const totalCapacityDucks = maxRolls * perR;
+            const remainingDucks = totalCapacityDucks - totalD;
 
-            // CHANGÉ : "canards" en entier ici
             document.getElementById('totalDisplay').innerHTML = rf + (rr > 0 ? ` <span>Rolls + ${rr} canards</span>` : ` <span>Rolls</span>`);
             document.getElementById('totalD').innerText = totalD + " canards";
-            document.getElementById('libre').innerText = (remains >= 0) ? remains + " canards" : "SURCHARGE";
-            footer.style.background = (needed <= maxRolls) ? "var(--gt-navy)" : "#DC2626";
+            document.getElementById('libre').innerText = (remainingDucks >= 0) ? remainingDucks + " canards" : "SURCHARGE";
+            
+            // Calcul du SOLDE de rolls restants pour le chauffeur
+            const rollsLeft = maxRolls - neededRolls;
+            document.getElementById('solde-rolls').innerHTML = remainingDucks >= 0 ? 
+                `Solde camion : <b>${rollsLeft} rolls</b> encore vides.` : 
+                `⚠️ <b>CAMION EN SURCHARGE</b>`;
+
+            footer.style.background = (neededRolls <= maxRolls) ? "var(--gt-navy)" : "#DC2626";
         } else { footer.classList.remove('visible'); }
     }
 
