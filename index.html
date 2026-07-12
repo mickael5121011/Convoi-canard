@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="icon" type="image/png" href="icon.png">
-    <title>GT Logistique - Expert Tournée</title>
+    <title>GT Logistique - Plan de Charge</title>
     <style>
         :root {
             --gt-navy: #00385D;
@@ -31,7 +31,7 @@
         #lock-screen button { margin-top: 20px; padding: 12px 40px; background: var(--gt-orange); color: white; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
 
         /* --- APPLI --- */
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 280px; display: none; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding-bottom: 320px; display: none; }
         
         header { 
             background: var(--white); padding: 15px 20px; border-bottom: 3px solid var(--gt-navy); 
@@ -39,51 +39,46 @@
         }
         .logo { font-weight: 900; font-size: 1.2rem; text-transform: uppercase; }
         .logo span { color: var(--gt-orange); }
-
         .btn-reset { background: #f1f1f1; border: 1px solid #ccc; padding: 8px 12px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; cursor: pointer; color: #666; }
 
-        .tabs { display: flex; background: var(--gt-navy); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .tab-btn { flex: 1; padding: 18px; border: none; color: rgba(255,255,255,0.6); background: transparent; font-weight: 800; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; transition: 0.3s; }
+        .tabs { display: flex; background: var(--gt-navy); }
+        .tab-btn { flex: 1; padding: 18px; border: none; color: rgba(255,255,255,0.6); background: transparent; font-weight: 800; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; }
         .tab-btn.active { color: white; background: rgba(255,255,255,0.15); border-bottom: 4px solid var(--gt-orange); }
 
         .card { background: var(--white); padding: 20px; margin: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-radius: 12px; }
-        .lot-card { 
-            background: var(--white); border-left: 6px solid var(--gt-orange); 
-            padding: 20px; margin: 0 15px 12px 15px; position: relative; 
-            border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
-            animation: cardEnter 0.4s ease-out; 
-        }
+        .section-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; color: var(--gt-navy); border-bottom: 1.5px solid #EEE; padding-bottom: 5px; }
+
+        .lot-card { background: var(--white); border-left: 5px solid var(--gt-orange); padding: 15px; margin: 0 15px 10px 15px; position: relative; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .lot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .lot-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--gt-orange); }
         
-        .section-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block; color: #888; }
-        
-        input[type="number"] { width: 100%; padding: 15px; border: 2px solid #E5E7EB; font-size: 1.5rem; font-weight: bold; outline: none; box-sizing: border-box; background: #FAFAFA; border-radius: 10px; color: var(--gt-navy); }
-        input:focus { border-color: var(--gt-orange); background: #FFF; }
+        input[type="number"] { width: 100%; padding: 12px; border: 1.5px solid #E5E7EB; font-size: 1.3rem; font-weight: bold; outline: none; box-sizing: border-box; background: #FAFAFA; border-radius: 8px; color: var(--gt-navy); }
+        .lot-res { margin-top: 10px; font-size: 0.9rem; font-weight: 700; background: #F0F4F7; padding: 8px; border-radius: 6px; color: var(--gt-navy); }
 
-        .lot-res { margin-top: 12px; font-size: 0.95rem; font-weight: 700; background: #F0F4F7; padding: 12px; border-radius: 8px; color: var(--gt-navy); }
+        .btn-add { width: calc(100% - 30px); margin: 5px 15px; background: #E5E7EB; color: var(--gt-navy); border: none; padding: 15px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 10px; font-size: 0.8rem; }
+        .btn-del { color: #CCC; background: none; border: none; font-size: 1.2rem; cursor: pointer; }
 
-        .btn-add { width: calc(100% - 30px); margin: 10px 15px; background: var(--gt-navy); color: white; border: none; padding: 20px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 12px; transition: transform 0.2s; }
-        .btn-add:active { transform: scale(0.98); }
-        .btn-del { color: #CCC; background: none; border: none; font-size: 1.4rem; cursor: pointer; position: absolute; right: 10px; top: 10px; }
-
-        /* FOOTER DASHBOARD */
+        /* FOOTER CALCUL AUTOMATIQUE */
         .footer { 
-            position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 25px; 
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--gt-navy); color: white; padding: 20px 25px; 
             max-width: 500px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); border-radius: 30px 30px 0 0;
             display: none; z-index: 200;
         }
         .footer.visible { display: block; }
-
-        .density-status { background: var(--success); color: white; padding: 6px 12px; font-size: 0.7rem; font-weight: 900; margin-bottom: 15px; display: inline-block; border-radius: 4px; text-transform: uppercase; }
-        .total-display { font-size: 2.3rem; font-weight: 900; line-height: 1; }
+        
+        .total-display { font-size: 2.2rem; font-weight: 900; line-height: 1; }
         .total-display span { font-size: 0.9rem; color: var(--gt-orange); margin-left: 5px; font-weight: 700; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .grid label { display: block; font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
-        .grid b { font-size: 1.1rem; }
+        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        .grid-stats label { display: block; font-size: 0.6rem; text-transform: uppercase; opacity: 0.6; margin-bottom: 2px; }
+        .grid-stats b { font-size: 1rem; color: #FFF; }
 
-        .complement-box { background: rgba(216, 76, 56, 0.15); border: 1px solid var(--gt-orange); border-radius: 8px; padding: 10px; margin-top: 10px; color: #fff; font-size: 0.85rem; text-align: center; }
+        /* BLOC SOLDE AUTO */
+        .solde-container { background: rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 15px; margin-top: 15px; border: 1px solid rgba(216, 76, 56, 0.3); }
+        .solde-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; }
+        .solde-row b { color: var(--gt-orange); font-size: 0.9rem; }
 
-        @keyframes cardEnter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes cardEnter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -91,8 +86,8 @@
 <div id="lock-screen">
     <div class="logo" style="font-size: 2rem;">GT<span>solutions</span></div>
     <p style="margin-top: 20px; font-weight: bold; font-size: 0.8rem; letter-spacing: 2px;">ACCÈS PRIVÉ CHAUFFEURS</p>
-    <input type="password" id="pass" placeholder="Code secret">
-    <button onclick="checkPass()">ENTRER DANS L'APPLI</button>
+    <input type="password" id="pass" placeholder="Code GT....">
+    <button onclick="checkPass()">ENTRER</button>
 </div>
 
 <div class="container" id="main-app">
@@ -107,30 +102,42 @@
     </div>
 
     <div class="card">
-        <span class="section-title">Choix du Véhicule</span>
+        <span class="section-title">1. Choix du Véhicule</span>
         <div style="display:flex; gap:10px;">
             <button id="cap48" style="flex:1; padding:15px; border-radius:10px; border:1px solid #DDD; font-weight:bold; cursor:pointer;" onclick="setCap(48)">Porteur 48</button>
             <button id="cap50" style="flex:1; padding:15px; border-radius:10px; border:1px solid #DDD; font-weight:bold; cursor:pointer;" onclick="setCap(50)">Porteur 50</button>
         </div>
     </div>
 
-    <div id="list"></div>
-    <button class="btn-add" id="add-btn" onclick="add()">+ Ajouter une destination</button>
+    <span class="section-title" style="margin: 20px 20px 10px 20px;">2. Chargements Principaux</span>
+    <div id="list-gaveurs"></div>
+    <button class="btn-add" onclick="add('gaveur')">+ Ajouter une destination</button>
+
+    <span class="section-title" style="margin: 25px 20px 10px 20px;">3. Compléments de lot</span>
+    <div id="list-complements"></div>
+    <button id="btn-add-comp" class="btn-add" onclick="add('complement')">+ Ajouter un complément</button>
 </div>
 
+<!-- FOOTER CALCULATEUR AUTO -->
 <div class="footer" id="footer">
-    <span id="footer-title" style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 5px; display: block;">Résumé de la tournée</span>
-    <div id="densityTag" class="density-status">MODE CONFORT : 6</div>
+    <div id="densityTag" style="background:var(--success); color:white; padding:4px 10px; font-size:0.65rem; font-weight:900; border-radius:3px; margin-bottom:10px; display:inline-block;">CONFORT : 6 / CAISSE</div>
     
     <div id="totalDisplay" class="total-display">0 <span>Rolls</span></div>
     
-    <div class="grid">
-        <div><label>Total chargés</label><b id="totalD">0 canards</b></div>
-        <div style="text-align:right;"><label>Place encore libre</label><b id="libre">0 canards</b></div>
+    <div class="grid-stats">
+        <div><label>Total canards</label><b id="totalD">0 canards</b></div>
+        <div style="text-align:right;"><label>Place Libre Camion</label><b id="libre">0 canards</b></div>
     </div>
 
-    <div id="solde-rolls" class="complement-box">
-        Solde camion : <b>0 rolls</b> restants à charger.
+    <div class="solde-container">
+        <div class="solde-row">
+            <span>Rolls 100% vides :</span>
+            <b id="empty-rolls-count">0 rolls</b>
+        </div>
+        <div class="solde-row">
+            <span>Pour finir le roll entamé :</span>
+            <b id="ducks-to-finish-roll">0 canards</b>
+        </div>
     </div>
 </div>
 
@@ -148,7 +155,7 @@
     }
 
     function resetApp() {
-        if(confirm("Effacer les données de la tournée ?")) {
+        if(confirm("Effacer les données ?")) {
             localStorage.clear();
             location.reload();
         }
@@ -158,8 +165,6 @@
         currentMode = mode;
         document.getElementById('tabEleveur').classList.toggle('active', mode === 'eleveur');
         document.getElementById('tabGras').classList.toggle('active', mode === 'gras');
-        document.getElementById('add-btn').innerText = (mode === 'eleveur') ? "+ Ajouter un Gaveur" : "+ Ajouter un Abattoir";
-        updateLabels();
         calc();
     }
 
@@ -172,41 +177,50 @@
         calc();
     }
 
-    function add(val = "") {
+    function add(type, val = "") {
+        const listId = (type === 'gaveur') ? 'list-gaveurs' : 'list-complements';
         const id = Date.now() + Math.random();
         const div = document.createElement('div');
-        div.className = 'lot-card';
+        div.className = `lot-card ${type}-item`;
         div.id = id;
+        
         div.innerHTML = `
-            <button onclick="document.getElementById('${id}').remove(); updateLabels(); calc();" class="btn-del">✕</button>
-            <span class="lot-title-text" style="font-size:0.7rem; font-weight:800; color:var(--gt-orange); text-transform:uppercase;">Gaveur</span>
+            <div class="lot-header">
+                <span class="lot-title">Saisie</span>
+                <button onclick="document.getElementById('${id}').remove(); updateLabels(); calc();" class="btn-del">✕</button>
+            </div>
             <input type="number" placeholder="0" class="duck-in" inputmode="numeric" oninput="calc()" value="${val}">
             <div class="lot-res">En attente...</div>
         `;
-        document.getElementById('list').appendChild(div);
+        document.getElementById(listId).appendChild(div);
         updateLabels();
     }
 
     function updateLabels() {
-        const titles = document.querySelectorAll('.lot-title-text');
-        const term = (currentMode === 'eleveur') ? 'Gaveur' : 'Abattoir';
-        titles.forEach((t, i) => t.innerText = `Destination ${term} n°${i+1}`);
-        const footerTitle = document.getElementById('footer-title');
-        footerTitle.innerText = (currentMode === 'eleveur') ? "À CHARGER CHEZ L'ÉLEVEUR" : "CHARGEMENT GRAS TOTAL";
+        const items = document.querySelectorAll('.lot-card');
+        items.forEach((item, i) => {
+            const title = item.querySelector('.lot-title');
+            if(item.classList.contains('gaveur-item')) title.innerText = "Destination n°" + (i+1);
+            else title.innerText = "Complément n°" + (i);
+        });
     }
 
     function calc() {
         const inputs = document.querySelectorAll('.duck-in');
-        let totalD = 0; let values = [];
-        inputs.forEach(i => { totalD += parseInt(i.value) || 0; values.push(i.value); });
-        localStorage.setItem('duckValues', JSON.stringify(values));
+        let totalD = 0; let valuesG = []; let valuesC = [];
+        
+        document.querySelectorAll('.gaveur-item .duck-in').forEach(i => { totalD += parseInt(i.value) || 0; valuesG.push(i.value); });
+        document.querySelectorAll('.complement-item .duck-in').forEach(i => { totalD += parseInt(i.value) || 0; valuesC.push(i.value); });
 
+        localStorage.setItem('duckGaveurs', JSON.stringify(valuesG));
+        localStorage.setItem('duckComps', JSON.stringify(valuesC));
+
+        // DENSITE
         let dens = (currentMode === 'gras') ? 4 : (totalD <= (maxRolls * 36) ? 6 : 7);
         let perR = dens * 6;
 
-        const tag = document.getElementById('densityTag');
-        tag.innerText = (currentMode === 'gras') ? "MODE GRAS : 4 / CAISSE" : (dens === 6 ? "MODE CONFORT : 6" : "MODE MAX : 7");
-        tag.style.background = (currentMode === 'gras') ? "#000" : (dens === 6 ? "var(--success)" : "var(--gt-orange)");
+        document.getElementById('densityTag').innerText = (currentMode === 'gras') ? "MODE GRAS : 4 / CAISSE" : (dens === 6 ? "MODE CONFORT : 6 / CAISSE" : "MODE MAX : 7 / CAISSE");
+        document.getElementById('densityTag').style.background = (currentMode === 'gras') ? "#000" : (dens === 6 ? "#16a34a" : "#D84C38");
 
         inputs.forEach(i => {
             const val = parseInt(i.value) || 0;
@@ -220,20 +234,22 @@
         const footer = document.getElementById('footer');
         if(totalD > 0) {
             footer.classList.add('visible');
-            const rf = Math.floor(totalD/perR); const rr = totalD%perR;
-            const neededRolls = Math.ceil(totalD/perR);
-            const totalCapacityDucks = maxRolls * perR;
-            const remainingDucks = totalCapacityDucks - totalD;
-
-            document.getElementById('totalDisplay').innerHTML = rf + (rr > 0 ? ` <span>Rolls + ${rr} canards</span>` : ` <span>Rolls</span>`);
-            document.getElementById('totalD').innerText = totalD + " canards";
-            document.getElementById('libre').innerText = (remainingDucks >= 0) ? remainingDucks + " canards" : "SURCHARGE";
             
-            // Calcul du SOLDE de rolls restants pour le chauffeur
-            const rollsLeft = maxRolls - neededRolls;
-            document.getElementById('solde-rolls').innerHTML = remainingDucks >= 0 ? 
-                `Solde camion : <b>${rollsLeft} rolls</b> encore vides.` : 
-                `⚠️ <b>CAMION EN SURCHARGE</b>`;
+            const neededRolls = Math.ceil(totalD/perR);
+            const totalFullRolls = Math.floor(totalD/perR);
+            const remainderInLast = totalD % perR;
+            
+            const remainsCamionDucks = (maxRolls * perR) - totalD;
+            const emptyRolls = Math.max(0, maxRolls - neededRolls);
+            const ducksToFinish = remainderInLast === 0 ? 0 : (perR - remainderInLast);
+
+            document.getElementById('totalDisplay').innerHTML = totalFullRolls + (remainderInLast > 0 ? ` <span>Rolls + ${remainderInLast} canards</span>` : ` <span>Rolls</span>`);
+            document.getElementById('totalD').innerText = totalD + " canards";
+            document.getElementById('libre').innerText = remainsCamionDucks >= 0 ? remainsCamionDucks + " canards" : "SURCHARGE";
+
+            // MISE A JOUR AUTOMATIQUE DU SOLDE
+            document.getElementById('empty-rolls-count').innerText = emptyRolls + " rolls";
+            document.getElementById('ducks-to-finish-roll').innerText = ducksToFinish + " canards";
 
             footer.style.background = (neededRolls <= maxRolls) ? "var(--gt-navy)" : "#DC2626";
         } else { footer.classList.remove('visible'); }
@@ -241,8 +257,10 @@
 
     function init() {
         setCap(48);
-        const saved = JSON.parse(localStorage.getItem('duckValues'));
-        if(saved && saved.length > 0) saved.forEach(v => add(v)); else add();
+        const savedG = JSON.parse(localStorage.getItem('duckGaveurs'));
+        const savedC = JSON.parse(localStorage.getItem('duckComps'));
+        if(savedG && savedG.length > 0) savedG.forEach(v => add('gaveur', v)); else add('gaveur');
+        if(savedC && savedC.length > 0) savedC.forEach(v => add('complement', v));
         calc();
     }
 </script>
